@@ -1,8 +1,11 @@
 const express = require("express");
+const fs = require("fs");
 const app = express();
 
 app.get("/", (req, res) => {
-  res.status(200).send("Hello server is running").end();
+  const jsonData = fs.readFileSync("./scores.json");
+  const data = JSON.parse(jsonData);
+  res.status(200).send(data).end();
 });
 
 // Start the server
