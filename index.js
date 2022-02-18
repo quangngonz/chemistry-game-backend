@@ -33,11 +33,14 @@ app.post("/sendScore", (req, res) => {
 
   const name = req.body.name;
   const score = req.body.score;
-  data.scores.push({ name: name, score: score });
 
-  fs.writeFileSync("./scores.json", JSON.stringify(data));
-
-  res.status(200).end();
+  if (name && score) {
+    data.scores.push({ name: name, score: score });
+    fs.writeFileSync("./scores.json", JSON.stringify(data));
+    res.status(200).end();
+  } else {
+    res.status(400).send("name and score are required").end();
+  }
 });
 
 // Start the server
