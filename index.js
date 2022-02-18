@@ -4,11 +4,11 @@ var bodyParser = require("body-parser");
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.status(200).send("Hi").end();
+app.get("/", (_req, res) => {
+  res.status(200).redirect("https://quangngo-chemistry.cf");
 });
 
-app.get("/getScore", (req, res) => {
+app.get("/getScore", (_req, res) => {
   const jsonData = fs.readFileSync("./scores.json");
   const data = JSON.parse(jsonData);
 
