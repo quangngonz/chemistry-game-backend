@@ -1,5 +1,7 @@
 const express = require("express");
 const fs = require("fs");
+var bodyParser = require("body-parser");
+
 const app = express();
 
 app.get("/", (req, res) => {
@@ -9,8 +11,20 @@ app.get("/", (req, res) => {
 app.get("/getScore", (req, res) => {
   const jsonData = fs.readFileSync("./scores.json");
   const data = JSON.parse(jsonData);
+
+  const scores = data.scores;
+
+  const topTeams = scores.sort(
+    (a, b) => b.score - a.score || a.name.localeCompare(b.name)
+  );
+
+  data.scores = topTeams;
+
   res.status(200).send(data).end();
 });
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // recive name and score and save it to json file
 app.post("/sendScore", (req, res) => {
@@ -19,15 +33,15 @@ app.post("/sendScore", (req, res) => {
 
   const name = req.body.name;
   const score = req.body.score;
+  data.scores.push({ name: name, score: score });
 
-  data.push({ name, score });
   fs.writeFileSync("./scores.json", JSON.stringify(data));
 
-  res.status(200).send(data).end();
+  res.status(200).end();
 });
 
 // Start the server
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log("Press Ctrl+C to quit.");
