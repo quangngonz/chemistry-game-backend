@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 const app = express();
 
 app.get("/", (_req, res) => {
-  res.status(200).redirect("https://quangngo-chemistry.cf");
+  res.status(301).redirect("https://quangngo-chemistry.cf");
 });
 
 app.get("/getScore", (_req, res) => {
