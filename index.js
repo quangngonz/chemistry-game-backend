@@ -28,6 +28,7 @@ app.get("/getScore", (_req, res) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 // recive name and score and save it to json file
 app.post("/sendScore", (req, res) => {
