@@ -1,5 +1,7 @@
 const express = require("express");
 const fs = require("fs");
+const moment = require("moment");
+const md5 = require("md5");
 var bodyParser = require("body-parser");
 var cors = require("cors");
 
@@ -36,18 +38,35 @@ app.post("/sendScore", (req, res) => {
 
   const name = req.body.name;
   const score = req.body.score;
+  const hash = md5(moment().valueOf());
+
+  console.log({ name: name, score: score, hash: hash });
 
   if (name && score) {
-    data.scores.push({ name: name, score: score });
+    data.scores.push({ name: name, score: score, hash: hash });
     fs.writeFileSync("./scores.json", JSON.stringify(data));
-    res.status(200).send({ name: name, score: score }).end();
+    res.status(200).send({ name: name, score: score, hash: hash }).end();
   } else {
-    res.status(400).send({ name: name, score: score }).end();
+    res.status(400).send({ name: name, score: score, hash: hash }).end();
   }
 });
 
+app.delete("/deleteScore", (req, res) => {
+  const jsonData = fs.readFileSync("./scores.json");
+  let data = JSON.parse(jsonData);
+
+  const hash = req.body.hash;
+
+  const index = data.scores.findIndex((score) => score.hash === hash);
+  data.scores.splice(index, 1);
+
+  fs.writeFileSync("./scores.json", JSON.stringify(data));
+
+  res.status(200).send(data.scores);
+});
+
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
