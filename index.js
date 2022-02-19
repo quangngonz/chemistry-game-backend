@@ -6,7 +6,18 @@ var cors = require("cors");
 
 const app = express();
 
-app.use(cors());
+const whitelist = ["http://localhost:3000", "https://quangngo-chemistry.cf"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.get("/", (_req, res) => {
   res.status(301).redirect("https://quangngo-chemistry.cf");
