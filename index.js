@@ -39,15 +39,22 @@ app.post("/sendScore", (req, res) => {
   const name = req.body.name;
   const score = req.body.score;
   const hash = md5(moment().valueOf());
+  const time = moment().format("DD/MM/YYYY HH:mm:ss");
 
-  console.log({ name: name, score: score, hash: hash });
+  console.log({ name: name, score: score, hash: hash, time: time });
 
   if (name && score) {
-    data.scores.push({ name: name, score: score, hash: hash });
+    data.scores.push({ name: name, score: score, hash: hash, time: time });
     fs.writeFileSync("./scores.json", JSON.stringify(data));
-    res.status(200).send({ name: name, score: score, hash: hash }).end();
+    res
+      .status(200)
+      .send({ name: name, score: score, hash: hash, time: time })
+      .end();
   } else {
-    res.status(400).send({ name: name, score: score, hash: hash }).end();
+    res
+      .status(400)
+      .send({ name: name, score: score, hash: hash, time: time })
+      .end();
   }
 });
 
