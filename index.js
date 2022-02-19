@@ -40,9 +40,9 @@ app.post("/sendScore", (req, res) => {
   if (name && score) {
     data.scores.push({ name: name, score: score });
     fs.writeFileSync("./scores.json", JSON.stringify(data));
-    res.status(200).end();
+    res.status(200).send({ name: name, score: score }).end();
   } else {
-    res.status(400).send(req.body.name).end();
+    res.status(400).send({ name: name, score: score }).end();
   }
 });
 
