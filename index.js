@@ -1,7 +1,6 @@
 const express = require("express");
 const fs = require("fs");
-const moment = require("moment");
-const md5 = require("md5");
+const crypto = require("crypto");
 var bodyParser = require("body-parser");
 var cors = require("cors");
 
@@ -38,8 +37,8 @@ app.post("/sendScore", (req, res) => {
 
   const name = req.body.name;
   const score = req.body.score;
-  const hash = md5(moment().valueOf());
-  const time = moment().format("DD/MM/YYYY HH:mm:ss");
+  const time = req.body.time;
+  const hash = crypto.randomBytes(20).toString("hex");
 
   console.log({ name: name, score: score, hash: hash, time: time });
 
