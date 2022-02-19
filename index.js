@@ -42,7 +42,7 @@ app.post("/sendScore", (req, res) => {
     fs.writeFileSync("./scores.json", JSON.stringify(data));
     res.status(200).end();
   } else {
-    res.status(400).send("name and score are required").end();
+    res.status(400).send(req.body.name).end();
   }
 });
 
